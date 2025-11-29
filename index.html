@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Growlauncher Update & Scripts By Hady</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#0f1724;--bg2:#061627;--accent1:#7b61ff;--accent2:#00e0ff;--accent3:#ff7bd0;--white:#eaf2ff;}
+*{box-sizing:border-box;font-family:"Poppins",system-ui,Segoe UI,Roboto,Arial;}
+html,body{height:100%;margin:0;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--white);}
+.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px;}
+.card{width:920px;max-width:96%;padding:36px;border-radius:16px;background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));box-shadow: 0 8px 40px rgba(2,6,23,0.6);border: 1px solid rgba(255,255,255,0.04);display:grid;grid-template-columns: 1fr 360px;gap:24px;align-items:start;}
+.left{padding:8px;}
+h1{margin:0;font-weight:800;font-size:28px;letter-spacing:0.2px;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.title{display:flex;align-items:center;gap:16px;margin-bottom:8px;}
+.logo{width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#081026;font-size:22px;box-shadow: 0 6px 18px rgba(123,97,255,0.18), inset 0 -6px 14px rgba(255,255,255,0.04);}
+.subtitle{font-size:14px;color:rgba(234,242,255,0.82);margin-top:6px;}
+p.lead{margin-top:14px;color:rgba(234,242,255,0.72);line-height:1.45;font-size:14px;}
+.right{padding:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:12px;display:flex;flex-direction:column;align-items:center;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 18px;border-radius:10px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color: #061026;font-weight:700;border:none;cursor:pointer;font-size:15px;box-shadow: 0 8px 20px rgba(3,10,30,0.45);}
+.muted{font-size:12px;color:rgba(234,242,255,0.62);margin-top:10px;}
+.small{font-size:13px;color:rgba(234,242,255,0.88);}
+.center{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;}
+.hidden{display:none;}
+.input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:var(--white);font-size:14px;}
+.info{padding:12px;border-radius:10px;background:rgba(255,255,255,0.02);margin-top:12px;font-size:13px;color:rgba(234,242,255,0.92);}
+.countdown{font-weight:700;color:var(--accent2);margin-top:10px;font-size:15px;}
+.code-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 8px;border-radius:8px;background:rgba(0,0,0,0.04);margin-bottom:6px;font-size:13px;}
+.code-text{font-weight:700;font-size:14px;}
+.small-btn{padding:6px 10px;font-size:13px;border-radius:8px;}
+.search-row{display:flex;gap:8px;align-items:center;margin-top:10px;}
+.search-result{margin-top:8px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.02);}
+.center-btns{display:flex;justify-content:center;width:100%;}
+.full-btn{width:100%;}
+.control-container{width:100%;padding:18px;border-radius:12px;background:linear-gradient(135deg, rgba(123,97,255,0.07), rgba(0,224,255,0.04)); display:flex; flex-direction:column; gap:8px; align-items:center; margin-top:20px;}
+@media(max-width:820px){.card{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="card">
+
+<div class="left">
+<div class="title">
+<div class="logo">GL</div>
+<div>
+<h1>Growlauncher Update & Scripts By Hady</h1>
+<div class="subtitle">Discord: <strong>Hady0717</strong></div>
+</div>
+</div>
+<div style="margin-top:20px">
+<button id="getBtn" class="btn">Get Growlauncher</button>
+</div>
+<div id="panel" class="info hidden" style="margin-top:18px">
+<div style="display:flex;gap:8px">
+<input id="codeInput" class="input" placeholder="Enter your code" aria-label="code input">
+<button id="submitBtn" class="btn" style="padding:10px 14px">Submit</button>
+</div>
+<div class="search-row">
+<input id="searchInput" class="input" placeholder="Search by code to see remaining uses" aria-label="search input">
+<button id="searchBtn" class="btn small-btn" style="padding:9px 12px">Search</button>
+</div>
+<div id="searchResult" class="search-result hidden"></div>
+<div id="message" class="muted" style="margin-top:10px"></div>
+<div id="countdown" class="countdown"></div>
+</div>
+<footer>© Hady — Growlauncher</footer>
+</div>
+
+<div class="right center">
+<div class="control-container">
+<button id="adminBtn" class="btn full-btn">Control Pannel</button>
+<button id="resetBtn" class="btn full-btn hidden">Reset All Users</button>
+</div>
+
+<div id="adminLoginPanel" class="info hidden" style="margin-top:12px;">
+<div style="display:flex;gap:8px;align-items:center;">
+<input id="adminPasswordInput" class="input" type="password" placeholder="Password">
+<button id="adminLoginBtn" class="btn small-btn">Login</button>
+</div>
+<div id="adminLoginMsg" class="muted" style="margin-top:6px;"></div>
+</div>
+
+<div id="adminPanel" class="info hidden" style="margin-top:12px;max-height:340px;overflow:auto">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<div class="small">Admin Controls</div>
+</div>
+<div class="search-row" style="margin-bottom:8px">
+<input id="adminNumberInput" class="input" placeholder="Lookup by number (01-99)">
+<button id="adminNumberBtn" class="btn small-btn">Lookup</button>
+</div>
+<div id="adminSearchResult" class="search-result hidden"></div>
+<div id="codesList"></div>
+</div>
+
+</div>
+</div>
+</div>
+
+<script>
+const redirectUrl='https://www.dropbox.com/scl/fi/ik12g46som83zxy1auqqw/Discord-Hady0717-Growlauncher-v6.1.43.apk?rlkey=7ix3vueunugyx1bi4ic9qldlg&st=5dnz9sfi&dl=1';
+const STORAGE_KEY='gl_codes_v3';
+const ADMIN_PASSWORD='53785';
+let isAdmin=false;
+const pad2=n=>String(n).padStart(2,'0');
+
+function genLettersForIndex(i){const salt=0x9e3779b1;let letters='';for(let j=0;j<3;j++){letters+=String.fromCharCode(65+(((i+1)*(j+7)*salt)>>>0)%26);}return letters;}
+function generateCodes(){let codes=[];for(let i=1;i<=99;i++){const num=pad2(i);const letters=genLettersForIndex(i);const cand=((i*131)%2===0)?(letters+num):(num+letters);codes.push({code:cand,uses:3,index:i});}return codes;}
+function save(codes){localStorage.setItem(STORAGE_KEY,JSON.stringify(codes));}
+function load(){try{const r=localStorage.getItem(STORAGE_KEY);return r?JSON.parse(r):null;}catch(e){return null;}}
+function ensureCodes(){let codes=load();if(!codes){codes=generateCodes();save(codes);}return codes;}
+let codes=ensureCodes();
+
+const getBtn=document.getElementById('getBtn'),
+panel=document.getElementById('panel'),
+submitBtn=document.getElementById('submitBtn'),
+codeInput=document.getElementById('codeInput'),
+message=document.getElementById('message'),
+countdownEl=document.getElementById('countdown'),
+searchInput=document.getElementById('searchInput'),
+searchBtn=document.getElementById('searchBtn'),
+searchResult=document.getElementById('searchResult'),
+adminBtn=document.getElementById('adminBtn'),
+adminLoginPanel=document.getElementById('adminLoginPanel'),
+adminPasswordInput=document.getElementById('adminPasswordInput'),
+adminLoginBtn=document.getElementById('adminLoginBtn'),
+adminLoginMsg=document.getElementById('adminLoginMsg'),
+adminPanel=document.getElementById('adminPanel'),
+codesListEl=document.getElementById('codesList'),
+adminNumberInput=document.getElementById('adminNumberInput'),
+adminNumberBtn=document.getElementById('adminNumberBtn'),
+adminSearchResult=document.getElementById('adminSearchResult'),
+resetBtn=document.getElementById('resetBtn');
+
+let countdownTimer=null,errorTimer=null;
+
+getBtn.addEventListener('click',()=>{panel.classList.remove('hidden'); codeInput.focus();});
+submitBtn.addEventListener('click',handleSubmit);
+codeInput.addEventListener('keydown',e=>{if(e.key==='Enter')handleSubmit();});
+searchBtn.addEventListener('click',handleSearch);
+searchInput.addEventListener('keydown',e=>{if(e.key==='Enter')handleSearch();});
+
+adminBtn.addEventListener('click',()=>{
+    if(isAdmin){
+        isAdmin=false;
+        adminPanel.classList.add('hidden');
+        resetBtn.classList.add('hidden');
+        adminLoginPanel.classList.add('hidden');
+        adminBtn.textContent='Owner Only';
+        updateAdminList();
+        return;
+    }
+    adminLoginPanel.classList.remove('hidden'); adminPasswordInput.focus();
+});
+
+adminLoginBtn.addEventListener('click',()=>{
+    const pw=adminPasswordInput.value.trim();
+    if(pw===ADMIN_PASSWORD){
+        isAdmin=true;
+        adminPanel.classList.remove('hidden');
+        resetBtn.classList.remove('hidden');
+        adminLoginPanel.classList.add('hidden');
+        adminPasswordInput.value='';
+        adminLoginMsg.textContent='';
+        adminBtn.textContent='Logout';
+        updateAdminList();
+    } else {
+        adminLoginMsg.textContent='Incorrect password.';
+        clearTimeout(errorTimer);
+        errorTimer=setTimeout(()=>{adminLoginMsg.textContent='';},5000);
+    }
+});
+
+function handleSubmit(){
+    const raw=(codeInput.value||'').trim().toUpperCase();
+    if(!raw){ message.textContent='Please enter a code.'; clearTimeout(errorTimer); errorTimer=setTimeout(()=>{message.textContent='';},10000); return; }
+    codes=load()||codes;
+    const idx=codes.findIndex(c=>c.code.toUpperCase()===raw);
+    if(idx===-1){ message.textContent='Invalid code.'; clearTimeout(errorTimer); errorTimer=setTimeout(()=>{message.textContent='';},10000); return; }
+    const entry=codes[idx];
+    if(entry.uses<=0){ message.textContent='This code has been used up.'; clearTimeout(errorTimer); errorTimer=setTimeout(()=>{message.textContent='';},10000); return; }
+    entry.uses=Math.max(0,entry.uses-1);
+    save(codes);
+    message.innerHTML=`Code accepted.<br><span style="font-size:14px">Remaining uses: ${entry.uses}</span>`;
+    updateAdminList();
+    handleAdminSearchUpdate(entry.code);
+    startRedirectCountdown(5);
+}
+
+function startRedirectCountdown(seconds){
+    clearInterval(countdownTimer);
+    let s=seconds;
+    countdownEl.textContent=`Redirecting in ${s}s...`;
+    countdownTimer=setInterval(()=>{
+        s--;
+        if(s<0){ clearInterval(countdownTimer); countdownEl.textContent=''; message.textContent=''; window.location.href=redirectUrl; }
+        else countdownEl.textContent=`Redirecting in ${s}s...`;
+    },1000);
+}
+
+function handleSearch(){
+    const raw=(searchInput.value||'').trim().toUpperCase();
+    if(!raw){ searchResult.classList.add('hidden'); return; }
+    codes=load()||codes;
+    const idx=codes.findIndex(c=>c.code.toUpperCase()===raw);
+    if(idx!==-1){const c=codes[idx]; searchResult.classList.remove('hidden'); searchResult.textContent=`${c.code} — Uses remaining: ${c.uses}`;
+        setTimeout(()=>{searchResult.classList.add('hidden');},5000);
+    }
+    else{searchResult.classList.remove('hidden'); searchResult.textContent='No matching code found.'; setTimeout(()=>{searchResult.classList.add('hidden');},5000);}
+}
+
+function handleAdminNumberLookup(){
+    if(!isAdmin) return;
+    const raw=(adminNumberInput.value||'').trim();
+    const numMatch=raw.match(/^0*([1-9][0-9]?)$/);
+    if(!numMatch){ adminSearchResult.textContent='Enter a number from 01 to 99.'; adminSearchResult.classList.remove('hidden'); setTimeout(()=>{adminSearchResult.classList.add('hidden');},10000); return; }
+    const n=parseInt(numMatch[1],10);
+    codes=load()||codes;
+    const idx=codes.findIndex(c=>c.index===n);
+    if(idx===-1){ adminSearchResult.textContent=`No code found for number ${pad2(n)}.`; adminSearchResult.classList.remove('hidden'); setTimeout(()=>{adminSearchResult.classList.add('hidden');},10000); return; }
+    const c=codes[idx];
+    adminSearchResult.classList.remove('hidden'); 
+    adminSearchResult.innerHTML=`${c.code} — Uses remaining: ${c.uses} <button class="btn small-btn full-btn" id="resetSingleBtn">Reset</button>`;
+    document.getElementById('resetSingleBtn').addEventListener('click',()=>{
+        c.uses=3; save(codes); handleAdminNumberLookup(); updateAdminList();
+    });
+}
+
+if(adminNumberBtn) adminNumberBtn.addEventListener('click',handleAdminNumberLookup);
+if(adminNumberInput) adminNumberInput.addEventListener('keydown',e=>{if(e.key==='Enter')handleAdminNumberLookup();});
+
+function updateAdminList(){
+    if(!isAdmin) return;
+    codes=load()||codes;
+    codesListEl.innerHTML='';
+    codes.forEach((c,idx)=>{
+        const row=document.createElement('div'); row.className='code-row';
+        const left=document.createElement('div'); left.style.display='flex'; left.style.flexDirection='column'; left.style.gap='4px';
+        const ct=document.createElement('div'); ct.className='code-text'; ct.textContent=c.code;
+        const uses=document.createElement('div'); uses.className='small'; uses.textContent=`Uses: ${c.uses}`;
+        left.appendChild(ct); left.appendChild(uses);
+        const right=document.createElement('div'); right.className='center-btns';
+        const resetBtnLocal=document.createElement('button'); resetBtnLocal.className='btn small-btn full-btn'; resetBtnLocal.textContent='Reset Uses';
+        resetBtnLocal.addEventListener('click',()=>{ c.uses=3; save(codes); updateAdminList(); });
+        right.appendChild(resetBtnLocal); row.appendChild(left); row.appendChild(right); codesListEl.appendChild(row);
+    });
+}
+
+resetBtn.addEventListener('click',()=>{
+    if(!isAdmin) return; 
+    codes=load()||codes; 
+    codes.forEach(c=>c.uses=3); 
+    save(codes); 
+    updateAdminList();
+});
+
+// update admin search automatically when code used
+function handleAdminSearchUpdate(code){
+    if(!isAdmin) return;
+    const raw=(adminNumberInput.value||'').trim();
+    if(!raw) return;
+    const nMatch=raw.match(/^0*([1-9][0-9]?)$/);
+    if(!nMatch) return;
+    const n=parseInt(nMatch[1],10);
+    const idx=codes.findIndex(c=>c.index===n);
+    if(idx===-1) return;
+    const c=codes[idx];
+    adminSearchResult.innerHTML=`${c.code} — Uses remaining: ${c.uses} <button class="btn small-btn full-btn" id="resetSingleBtn">Reset</button>`;
+    document.getElementById('resetSingleBtn').addEventListener('click',()=>{
+        c.uses=3; save(codes); handleAdminNumberLookup(); updateAdminList();
+    });
+}
+</script>
+</body>
+</html>
