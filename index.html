@@ -3,276 +3,267 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Growlauncher By Hady</title>
+<title>Growlauncher Update & Scripts By Hady</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg1:#0f1724;--bg2:#061627;--accent1:#7b61ff;--accent2:#00e0ff;--accent3:#ff7bd0;--white:#eaf2ff;}
-*{box-sizing:border-box;font-family:"Poppins",system-ui,Segoe UI,Roboto,Arial;}
-html,body{height:100%;margin:0;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--white);}
-.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px;}
-.card{width:920px;max-width:96%;padding:36px;border-radius:16px;background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));box-shadow: 0 8px 40px rgba(2,6,23,0.6);border: 1px solid rgba(255,255,255,0.04);display:grid;grid-template-columns: 1fr 360px;gap:24px;align-items:start;}
-.left{padding:8px;}
-h1{margin:0;font-weight:800;font-size:28px;letter-spacing:0.2px;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.title{display:flex;align-items:center;gap:16px;margin-bottom:8px;}
-.logo{width:72px;height:72px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#081026;font-size:22px;box-shadow: 0 6px 18px rgba(123,97,255,0.18), inset 0 -6px 14px rgba(255,255,255,0.04);}
-.subtitle{font-size:14px;color:rgba(234,242,255,0.82);margin-top:6px;}
-p.lead{margin-top:14px;color:rgba(234,242,255,0.72);line-height:1.45;font-size:14px;}
-.right{padding:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:12px;display:flex;flex-direction:column;align-items:center;}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 18px;border-radius:10px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color: #061026;font-weight:700;border:none;cursor:pointer;font-size:15px;box-shadow: 0 8px 20px rgba(3,10,30,0.45);}
-.muted{font-size:12px;color:rgba(234,242,255,0.62);margin-top:10px;}
-.small{font-size:13px;color:rgba(234,242,255,0.88);}
-.center{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;}
-.hidden{display:none;}
-.input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:var(--white);font-size:14px;}
-.info{padding:12px;border-radius:10px;background:rgba(255,255,255,0.02);margin-top:12px;font-size:13px;color:rgba(234,242,255,0.92);}
-.countdown{font-weight:700;color:var(--accent2);margin-top:10px;font-size:15px;}
-.code-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 8px;border-radius:8px;background:rgba(0,0,0,0.04);margin-bottom:6px;font-size:13px;}
-.code-text{font-weight:700;font-size:14px;}
-.small-btn{padding:6px 10px;font-size:13px;border-radius:8px;}
-.search-row{display:flex;gap:8px;align-items:center;margin-top:10px;}
-.search-result{margin-top:8px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.02);}
-.center-btns{display:flex;justify-content:center;width:100%;}
-.full-btn{width:100%;}
-.control-container{width:100%;padding:18px;border-radius:12px;background:linear-gradient(135deg, rgba(123,97,255,0.07), rgba(0,224,255,0.04)); display:flex; flex-direction:column; gap:8px; align-items:center; margin-top:20px;}
-@media(max-width:820px){.card{grid-template-columns:1fr;}}
+:root {
+  --bg1: #0f1724;
+  --bg2: #061627;
+  --accent1: #7b61ff;
+  --accent2: #00e0ff;
+  --white: #eaf2ff;
+}
+* {box-sizing:border-box;font-family:"Poppins",sans-serif;margin:0;padding:0;}
+html, body {height:100%;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--white);display:flex;justify-content:center;align-items:flex-start;padding-top:20px;}
+.card {width:360px;max-width:95%;padding:36px;border-radius:16px;background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));box-shadow:0 8px 40px rgba(2,6,23,0.6);text-align:center;display:flex;flex-direction:column;}
+h2 {font-weight:800;font-size:24px;margin-bottom:6px;}
+.subtitle {font-size:14px;color:rgba(234,242,255,0.82);margin-bottom:12px;} 
+input {width:100%;padding:10px 12px;margin:6px 0;border-radius:10px;border:none;background:rgba(255,255,255,0.05);color:var(--white);}
+button {padding:12px 18px;border:none;border-radius:10px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#061026;font-weight:700;cursor:pointer;width:100%;margin:6px 0;}
+.hidden {display:none;}
+.muted {color:rgba(234,242,255,0.7);margin-top:8px;font-size:13px;}
+hr {border:none;border-top:1px solid rgba(255,255,255,0.2);margin:12px 0;}
+#redirecting {color:var(--accent2);font-weight:700;margin-top:8px;font-size:14px;}
+#adminPanel {display:flex;flex-direction:column;margin-top:12px;max-height:400px;}
+#adminSearchInput {margin-bottom:12px;}
+#adminCodesContainer {overflow-y:auto;flex:1;position:relative;max-height:340px;}
 </style>
 </head>
 <body>
-<div class="wrap">
 <div class="card">
+  <div class="logo" style="width:72px;height:72px;margin:0 auto 12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#061026;font-size:22px;">GL</div>
+  <h2>Growlauncher Update & Scripts By Hady</h2>
+  <div class="subtitle">Discord: <strong>Hady0717</strong></div>
 
-<div class="left">
-<div class="title">
-<div class="logo">GL</div>
-<div>
-<h1>Growlauncher Update & Scripts By Hady</h1>
-<div class="subtitle">Discord: <strong>Hady0717</strong></div>
-</div>
-</div>
-<div style="margin-top:20px">
-<button id="getBtn" class="btn">Get Growlauncher</button>
-</div>
-<div id="panel" class="info hidden" style="margin-top:18px">
-<div style="display:flex;gap:8px">
-<input id="codeInput" class="input" placeholder="Enter your code" aria-label="code input">
-<button id="submitBtn" class="btn" style="padding:10px 14px">Submit</button>
-</div>
-<div class="search-row">
-<input id="searchInput" class="input" placeholder="Search by code to see remaining uses" aria-label="search input">
-<button id="searchBtn" class="btn small-btn" style="padding:9px 12px">Search</button>
-</div>
-<div id="searchResult" class="search-result hidden"></div>
-<div id="message" class="muted" style="margin-top:10px"></div>
-<div id="countdown" class="countdown"></div>
-</div>
-<footer>© Hady — Growlauncher</footer>
-</div>
+  <button id="getBtn">Get Growlauncher</button>
 
-<div class="right center">
-<div class="control-container">
-<button id="adminBtn" class="btn full-btn">Control Pannel</button>
-<button id="resetBtn" class="btn full-btn hidden">Reset All Users</button>
-</div>
+  <div id="panel" class="hidden">
+    <input id="codeInput" placeholder="Enter your code">
+    <button id="submitBtn">Submit</button>
+    <div id="message" class="muted"></div>
+    <div id="redirecting" class="hidden">Redirecting<span id="dots">...</span></div>
 
-<div id="adminLoginPanel" class="info hidden" style="margin-top:12px;">
-<div style="display:flex;gap:8px;align-items:center;">
-<input id="adminPasswordInput" class="input" type="password" placeholder="Password">
-<button id="adminLoginBtn" class="btn small-btn">Login</button>
-</div>
-<div id="adminLoginMsg" class="muted" style="margin-top:6px;"></div>
+    <hr>
+
+    <input id="userSearchInput" placeholder="Enter your code to check uses">
+    <button id="userSearchBtn">Search Code</button>
+    <div id="userSearchMsg" class="muted"></div>
+
+    <hr>
+  </div>
+
+  <button id="adminBtn">Admin Panel</button>
+  <div id="adminLoginPanel" class="hidden" style="margin-top:12px;">
+    <input id="adminPasswordInput" type="password" placeholder="Password">
+    <button id="adminLoginBtn">Login</button>
+    <div id="adminLoginMsg" class="muted"></div>
+  </div>
+
+  <!-- Admin Panel Hidden Initially -->
+  <div id="adminPanel" class="hidden">
+    <!-- Logout and Reset Buttons will be dynamically added here -->
+    <input id="adminSearchInput" class="hidden" placeholder="Search codes by number">
+    <div id="adminCodesContainer"></div>
+  </div>
+
+  <footer id="footer">© Hady — Growlauncher</footer>
 </div>
 
-<div id="adminPanel" class="info hidden" style="margin-top:12px;max-height:340px;overflow:auto">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-<div class="small">Admin Controls</div>
-</div>
-<div class="search-row" style="margin-bottom:8px">
-<input id="adminNumberInput" class="input" placeholder="Lookup by number (01-99)">
-<button id="adminNumberBtn" class="btn small-btn">Lookup</button>
-</div>
-<div id="adminSearchResult" class="search-result hidden"></div>
-<div id="codesList"></div>
-</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+import { getFirestore, doc, getDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 
-</div>
-</div>
-</div>
+const firebaseConfig = {
+  apiKey: "AIzaSyAdJeuG7w4khT4B6Yq5wWBbDYKfCdvWn8w",
+  authDomain: "growlauncher-0.firebaseapp.com",
+  projectId: "growlauncher-0",
+  storageBucket: "growlauncher-0.firebasestorage.app",
+  messagingSenderId: "205612782940",
+  appId: "1:205612782940:web:3ec9eb98624158b2829d99"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-<script>
-const redirectUrl='https://www.dropbox.com/scl/fi/ik12g46som83zxy1auqqw/Discord-Hady0717-Growlauncher-v6.1.43.apk?rlkey=7ix3vueunugyx1bi4ic9qldlg&st=5dnz9sfi&dl=1';
-const STORAGE_KEY='gl_codes_v3';
-const ADMIN_PASSWORD='53785';
+// User elements
+const getBtn = document.getElementById("getBtn");
+const panel = document.getElementById("panel");
+const codeInput = document.getElementById("codeInput");
+const submitBtn = document.getElementById("submitBtn");
+const message = document.getElementById("message");
+const redirecting = document.getElementById("redirecting");
+const dots = document.getElementById("dots");
+const userSearchInput = document.getElementById("userSearchInput");
+const userSearchBtn = document.getElementById("userSearchBtn");
+const userSearchMsg = document.getElementById("userSearchMsg");
+
+// Admin elements
+const adminBtn = document.getElementById("adminBtn");
+const adminLoginPanel = document.getElementById("adminLoginPanel");
+const adminPasswordInput = document.getElementById("adminPasswordInput");
+const adminLoginBtn = document.getElementById("adminLoginBtn");
+const adminLoginMsg = document.getElementById("adminLoginMsg");
+const adminPanel = document.getElementById("adminPanel");
+const adminSearchInput = document.getElementById("adminSearchInput");
+const codesContainer = document.getElementById("adminCodesContainer");
+
+const ADMIN_PASSWORD = "53785";
 let isAdmin=false;
-const pad2=n=>String(n).padStart(2,'0');
 
-function genLettersForIndex(i){const salt=0x9e3779b1;let letters='';for(let j=0;j<3;j++){letters+=String.fromCharCode(65+(((i+1)*(j+7)*salt)>>>0)%26);}return letters;}
-function generateCodes(){let codes=[];for(let i=1;i<=99;i++){const num=pad2(i);const letters=genLettersForIndex(i);const cand=((i*131)%2===0)?(letters+num):(num+letters);codes.push({code:cand,uses:3,index:i});}return codes;}
-function save(codes){localStorage.setItem(STORAGE_KEY,JSON.stringify(codes));}
-function load(){try{const r=localStorage.getItem(STORAGE_KEY);return r?JSON.parse(r):null;}catch(e){return null;}}
-function ensureCodes(){let codes=load();if(!codes){codes=generateCodes();save(codes);}return codes;}
-let codes=ensureCodes();
-
-const getBtn=document.getElementById('getBtn'),
-panel=document.getElementById('panel'),
-submitBtn=document.getElementById('submitBtn'),
-codeInput=document.getElementById('codeInput'),
-message=document.getElementById('message'),
-countdownEl=document.getElementById('countdown'),
-searchInput=document.getElementById('searchInput'),
-searchBtn=document.getElementById('searchBtn'),
-searchResult=document.getElementById('searchResult'),
-adminBtn=document.getElementById('adminBtn'),
-adminLoginPanel=document.getElementById('adminLoginPanel'),
-adminPasswordInput=document.getElementById('adminPasswordInput'),
-adminLoginBtn=document.getElementById('adminLoginBtn'),
-adminLoginMsg=document.getElementById('adminLoginMsg'),
-adminPanel=document.getElementById('adminPanel'),
-codesListEl=document.getElementById('codesList'),
-adminNumberInput=document.getElementById('adminNumberInput'),
-adminNumberBtn=document.getElementById('adminNumberBtn'),
-adminSearchResult=document.getElementById('adminSearchResult'),
-resetBtn=document.getElementById('resetBtn');
-
-let countdownTimer=null,errorTimer=null;
-
-getBtn.addEventListener('click',()=>{panel.classList.remove('hidden'); codeInput.focus();});
-submitBtn.addEventListener('click',handleSubmit);
-codeInput.addEventListener('keydown',e=>{if(e.key==='Enter')handleSubmit();});
-searchBtn.addEventListener('click',handleSearch);
-searchInput.addEventListener('keydown',e=>{if(e.key==='Enter')handleSearch();});
-
-adminBtn.addEventListener('click',()=>{
-    if(isAdmin){
-        isAdmin=false;
-        adminPanel.classList.add('hidden');
-        resetBtn.classList.add('hidden');
-        adminLoginPanel.classList.add('hidden');
-        adminBtn.textContent='Control Panel';
-        updateAdminList();
-        return;
-    }
-    adminLoginPanel.classList.remove('hidden'); adminPasswordInput.focus();
+// Show user panel
+getBtn.addEventListener("click",()=>{
+  panel.classList.remove("hidden");
+  getBtn.classList.add("hidden");
+  codeInput.focus();
 });
 
-adminLoginBtn.addEventListener('click',()=>{
-    const pw=adminPasswordInput.value.trim();
-    if(pw===ADMIN_PASSWORD){
-        isAdmin=true;
-        adminPanel.classList.remove('hidden');
-        resetBtn.classList.remove('hidden');
-        adminLoginPanel.classList.add('hidden');
-        adminPasswordInput.value='';
-        adminLoginMsg.textContent='';
-        adminBtn.textContent='Logout';
-        updateAdminList();
-    } else {
-        adminLoginMsg.textContent='Incorrect password.';
-        clearTimeout(errorTimer);
-        errorTimer=setTimeout(()=>{adminLoginMsg.textContent='';},5000);
+// User code submission
+submitBtn.addEventListener("click", handleSubmit);
+codeInput.addEventListener("keydown", e=>{if(e.key==="Enter") handleSubmit();});
+
+async function handleSubmit(){
+  const code=(codeInput.value||"").trim().toUpperCase();
+  if(!code){message.textContent="Please enter a code.";return;}
+  try{
+    const codeRef=doc(db,"licenses",code);
+    const codeSnap=await getDoc(codeRef);
+    if(!codeSnap.exists()){message.textContent="Invalid code."; return;}
+    const data=codeSnap.data();
+    if(data.uses<=0){message.textContent="This code has been used up."; return;}
+    await updateDoc(codeRef,{uses:data.uses-1});
+    message.textContent=`Code accepted. Remaining uses: ${data.uses-1}`;
+
+    redirecting.classList.remove("hidden");
+    let dotCount=0;
+    const interval=setInterval(()=>{dotCount=(dotCount+1)%4; dots.textContent='.'.repeat(dotCount);},500);
+    setTimeout(()=>{clearInterval(interval); redirecting.classList.add("hidden"); window.location.href="https://www.dropbox.com/scl/fi/ik12g46som83zxy1auqqw/Discord-Hady0717-Growlauncher-v6.1.43.apk?dl=1";},5000);
+
+  }catch(err){console.error(err); message.textContent="Error checking code. Try again.";}
+}
+
+// User search
+userSearchBtn.addEventListener("click", handleUserSearch);
+userSearchInput.addEventListener("keydown", e=>{if(e.key==="Enter") handleUserSearch();});
+async function handleUserSearch(){
+  const searchVal=(userSearchInput.value||"").trim().toUpperCase();
+  if(!searchVal){userSearchMsg.textContent=""; return;}
+  const codesCol=collection(db,"licenses");
+  const snapshot=await getDocs(codesCol);
+  let found=false;
+  snapshot.forEach(docSnap=>{
+    const codeStr=docSnap.id.toUpperCase();
+    if(codeStr.includes(searchVal)){
+      const data=docSnap.data();
+      userSearchMsg.textContent=`${docSnap.id} — Uses remaining: ${data.uses}`;
+      found=true;
     }
+  });
+  if(!found) userSearchMsg.textContent="No matching code found.";
+}
+
+// Admin panel toggle
+adminBtn.addEventListener("click",()=>{
+  if(isAdmin){isAdmin=false; adminPanel.classList.add("hidden"); adminLoginPanel.classList.add("hidden"); return;}
+  adminLoginPanel.classList.toggle("hidden"); adminPasswordInput.focus();
 });
 
-function handleSubmit(){
-    const raw=(codeInput.value||'').trim().toUpperCase();
-    if(!raw){ message.textContent='Please enter a code.'; clearTimeout(errorTimer); errorTimer=setTimeout(()=>{message.textContent='';},10000); return; }
-    codes=load()||codes;
-    const idx=codes.findIndex(c=>c.code.toUpperCase()===raw);
-    if(idx===-1){ message.textContent='Invalid code.'; clearTimeout(errorTimer); errorTimer=setTimeout(()=>{message.textContent='';},10000); return; }
-    const entry=codes[idx];
-    if(entry.uses<=0){ message.textContent='This code has been used up.'; clearTimeout(errorTimer); errorTimer=setTimeout(()=>{message.textContent='';},10000); return; }
-    entry.uses=Math.max(0,entry.uses-1);
-    save(codes);
-    message.innerHTML=`Code accepted.<br><span style="font-size:14px">Remaining uses: ${entry.uses}</span>`;
-    updateAdminList();
-    handleAdminSearchUpdate(entry.code);
-    startRedirectCountdown(5);
-}
-
-function startRedirectCountdown(seconds){
-    clearInterval(countdownTimer);
-    let s=seconds;
-    countdownEl.textContent=`Redirecting in ${s}s...`;
-    countdownTimer=setInterval(()=>{
-        s--;
-        if(s<0){ clearInterval(countdownTimer); countdownEl.textContent=''; message.textContent=''; window.location.href=redirectUrl; }
-        else countdownEl.textContent=`Redirecting in ${s}s...`;
-    },1000);
-}
-
-function handleSearch(){
-    const raw=(searchInput.value||'').trim().toUpperCase();
-    if(!raw){ searchResult.classList.add('hidden'); return; }
-    codes=load()||codes;
-    const idx=codes.findIndex(c=>c.code.toUpperCase()===raw);
-    if(idx!==-1){const c=codes[idx]; searchResult.classList.remove('hidden'); searchResult.textContent=`${c.code} — Uses remaining: ${c.uses}`;
-        setTimeout(()=>{searchResult.classList.add('hidden');},5000);
-    }
-    else{searchResult.classList.remove('hidden'); searchResult.textContent='No matching code found.'; setTimeout(()=>{searchResult.classList.add('hidden');},5000);}
-}
-
-function handleAdminNumberLookup(){
-    if(!isAdmin) return;
-    const raw=(adminNumberInput.value||'').trim();
-    const numMatch=raw.match(/^0*([1-9][0-9]?)$/);
-    if(!numMatch){ adminSearchResult.textContent='Enter a number from 01 to 99.'; adminSearchResult.classList.remove('hidden'); setTimeout(()=>{adminSearchResult.classList.add('hidden');},10000); return; }
-    const n=parseInt(numMatch[1],10);
-    codes=load()||codes;
-    const idx=codes.findIndex(c=>c.index===n);
-    if(idx===-1){ adminSearchResult.textContent=`No code found for number ${pad2(n)}.`; adminSearchResult.classList.remove('hidden'); setTimeout(()=>{adminSearchResult.classList.add('hidden');},10000); return; }
-    const c=codes[idx];
-    adminSearchResult.classList.remove('hidden'); 
-    adminSearchResult.innerHTML=`${c.code} — Uses remaining: ${c.uses} <button class="btn small-btn full-btn" id="resetSingleBtn">Reset</button>`;
-    document.getElementById('resetSingleBtn').addEventListener('click',()=>{
-        c.uses=3; save(codes); handleAdminNumberLookup(); updateAdminList();
-    });
-}
-
-if(adminNumberBtn) adminNumberBtn.addEventListener('click',handleAdminNumberLookup);
-if(adminNumberInput) adminNumberInput.addEventListener('keydown',e=>{if(e.key==='Enter')handleAdminNumberLookup();});
-
-function updateAdminList(){
-    if(!isAdmin) return;
-    codes=load()||codes;
-    codesListEl.innerHTML='';
-    codes.forEach((c,idx)=>{
-        const row=document.createElement('div'); row.className='code-row';
-        const left=document.createElement('div'); left.style.display='flex'; left.style.flexDirection='column'; left.style.gap='4px';
-        const ct=document.createElement('div'); ct.className='code-text'; ct.textContent=c.code;
-        const uses=document.createElement('div'); uses.className='small'; uses.textContent=`Uses: ${c.uses}`;
-        left.appendChild(ct); left.appendChild(uses);
-        const right=document.createElement('div'); right.className='center-btns';
-        const resetBtnLocal=document.createElement('button'); resetBtnLocal.className='btn small-btn full-btn'; resetBtnLocal.textContent='Reset Uses';
-        resetBtnLocal.addEventListener('click',()=>{ c.uses=3; save(codes); updateAdminList(); });
-        right.appendChild(resetBtnLocal); row.appendChild(left); row.appendChild(right); codesListEl.appendChild(row);
-    });
-}
-
-resetBtn.addEventListener('click',()=>{
-    if(!isAdmin) return; 
-    codes=load()||codes; 
-    codes.forEach(c=>c.uses=3); 
-    save(codes); 
-    updateAdminList();
+// Admin login
+adminLoginBtn.addEventListener("click", async ()=>{
+  const pw=adminPasswordInput.value.trim();
+  if(pw===ADMIN_PASSWORD){
+    isAdmin=true;
+    adminPanel.classList.remove("hidden");
+    adminSearchInput.classList.remove("hidden");
+    adminLoginPanel.classList.add("hidden");
+    adminBtn.classList.add("hidden");
+    adminPasswordInput.value="";
+    adminLoginMsg.textContent="";
+    await loadAdminCodes(true);
+  } else {adminLoginMsg.textContent="Incorrect password.";}
 });
 
-// update admin search automatically when code used
-function handleAdminSearchUpdate(code){
-    if(!isAdmin) return;
-    const raw=(adminNumberInput.value||'').trim();
-    if(!raw) return;
-    const nMatch=raw.match(/^0*([1-9][0-9]?)$/);
-    if(!nMatch) return;
-    const n=parseInt(nMatch[1],10);
-    const idx=codes.findIndex(c=>c.index===n);
-    if(idx===-1) return;
-    const c=codes[idx];
-    adminSearchResult.innerHTML=`${c.code} — Uses remaining: ${c.uses} <button class="btn small-btn full-btn" id="resetSingleBtn">Reset</button>`;
-    document.getElementById('resetSingleBtn').addEventListener('click',()=>{
-        c.uses=3; save(codes); handleAdminNumberLookup(); updateAdminList();
+// Load admin codes with Logout & Reset buttons at top
+async function loadAdminCodes(showTopBtns=false){
+  codesContainer.innerHTML="";
+  if(showTopBtns){
+    const logoutBtn=document.createElement("button");
+    logoutBtn.textContent="Logout";
+    logoutBtn.addEventListener("click", ()=>{
+      isAdmin=false; adminPanel.classList.add("hidden"); adminSearchInput.classList.add("hidden"); adminBtn.classList.remove("hidden"); codesContainer.innerHTML="";
     });
+    const resetAllBtn=document.createElement("button");
+    resetAllBtn.textContent="Reset All Users";
+    resetAllBtn.addEventListener("click", async ()=>{
+      const codesCol=collection(db,"licenses");
+      const snapshot=await getDocs(codesCol);
+      snapshot.forEach(async docSnap=>{await updateDoc(doc(db,"licenses",docSnap.id),{uses:3});});
+      await loadAdminCodes(true);
+    });
+    codesContainer.appendChild(logoutBtn);
+    codesContainer.appendChild(resetAllBtn);
+  }
+
+  const codesCol=collection(db,"licenses");
+  const snapshot=await getDocs(codesCol);
+  snapshot.forEach(docSnap=>{
+    const codeStr=docSnap.id;
+    const data=docSnap.data();
+    const div=document.createElement("div");
+    div.style.margin="6px 0";
+    div.innerHTML=`<span>${codeStr} — Uses: ${data.uses}</span> <button style="margin-top:4px;">Reset Uses</button>`;
+    const btn=div.querySelector("button");
+    btn.addEventListener("click", async ()=>{
+      await updateDoc(doc(db,"licenses",codeStr),{uses:3});
+      await loadAdminCodes(true);
+    });
+    codesContainer.appendChild(div);
+  });
 }
+
+// Admin search
+adminSearchInput.addEventListener("keydown", async e=>{
+  if(e.key==="Enter"){
+    const val=(adminSearchInput.value||"").trim();
+    codesContainer.innerHTML="";
+    const logoutBtn=document.createElement("button");
+    logoutBtn.textContent="Logout";
+    logoutBtn.addEventListener("click", ()=>{
+      isAdmin=false; adminPanel.classList.add("hidden"); adminSearchInput.classList.add("hidden"); adminBtn.classList.remove("hidden"); codesContainer.innerHTML="";
+    });
+    const resetAllBtn=document.createElement("button");
+    resetAllBtn.textContent="Reset All Users";
+    resetAllBtn.addEventListener("click", async ()=>{
+      const codesCol=collection(db,"licenses");
+      const snapshot=await getDocs(codesCol);
+      snapshot.forEach(async docSnap=>{await updateDoc(doc(db,"licenses",docSnap.id),{uses:3});});
+      await loadAdminCodes(true);
+    });
+    codesContainer.appendChild(logoutBtn);
+    codesContainer.appendChild(resetAllBtn);
+
+    const codesCol=collection(db,"licenses");
+    const snapshot=await getDocs(codesCol);
+    snapshot.forEach(docSnap=>{
+      const codeStr=docSnap.id;
+      if(codeStr.includes(val)){
+        const data=docSnap.data();
+        const div=document.createElement("div");
+        div.style.margin="6px 0";
+        div.innerHTML=`<span>${codeStr} — Uses: ${data.uses}</span> <button style="margin-top:4px;">Reset Uses</button>`;
+        const btn=div.querySelector("button");
+        btn.addEventListener("click", async ()=>{
+          await updateDoc(doc(db,"licenses",codeStr),{uses:3});
+          await loadAdminCodes(true);
+        });
+        codesContainer.appendChild(div);
+      }
+    });
+  }
+});
+
+// Restore all codes if admin search emptied
+adminSearchInput.addEventListener("input", async ()=>{
+  if(adminSearchInput.value.trim()===""){ await loadAdminCodes(true); }
+});
 </script>
 </body>
 </html>
-
-
