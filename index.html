@@ -74,18 +74,18 @@ hr {border:none;border-top:1px solid rgba(255,255,255,0.2);margin:12px 0;}
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-import { getFirestore, doc, getDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/js/10.1.0/-app.js";
+import { getFirestore, doc, getDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/js/10.1.0/-firestore.js";
 
-const firebaseConfig = {
+const Config = {
   apiKey: "AIzaSyAdJeuG7w4khT4B6Yq5wWBbDYKfCdvWn8w",
-  authDomain: "growlauncher-0.firebaseapp.com",
+  authDomain: "growlauncher-0.app.com",
   projectId: "growlauncher-0",
-  storageBucket: "growlauncher-0.firebasestorage.app",
+  storageBucket: "growlauncher-0.storage.app",
   messagingSenderId: "205612782940",
   appId: "1:205612782940:web:3ec9eb98624158b2829d99"
 };
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(Config);
 const db = getFirestore(app);
 
 // User elements
@@ -139,7 +139,7 @@ async function handleSubmit(){
     redirecting.classList.remove("hidden");
     let dotCount=0;
     const interval=setInterval(()=>{dotCount=(dotCount+1)%4; dots.textContent='.'.repeat(dotCount);},500);
-    setTimeout(()=>{clearInterval(interval); redirecting.classList.add("hidden"); window.location.href="https://firebasestorage.googleapis.com/v0/b/growlauncher-0.firebasestorage.app/o/%5B%20Discord%40Hady0717%20%5D%20Growlauncher%20v6.1.45.apk?alt=media&token=02a938ea-063a-4d03-a6f6-417f8b4adeb3";},5000);
+    setTimeout(()=>{clearInterval(interval); redirecting.classList.add("hidden"); window.location.href="https://firebasestorage.googleapis.com/v0/b/growlauncher-0.firebasestorage.app/o/%5B%20Discord%40Hady0717%20%5D%20GrowLauncher%20v7.0.10.apk?alt=media&token=8b1da1a1-b4b0-4d76-a79c-e15f9a00af6d";},5000);
 
   }catch(err){console.error(err); message.textContent="Error checking code. Try again.";}
 }
@@ -271,6 +271,7 @@ adminSearchInput.addEventListener("input", async ()=>{
 </script>
 </body>
 </html>
+
 
 
 
