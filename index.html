@@ -23,6 +23,7 @@ h2 {font-weight:800;font-size:24px;margin-bottom:6px;}
 input {width:100%;padding:10px 12px;margin:6px 0;border-radius:10px;border:none;background:rgba(255,255,255,0.05);color:var(--white);}
 button {padding:12px 18px;border:none;border-radius:10px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#061026;font-weight:700;cursor:pointer;width:100%;margin:6px 0;}
 .hidden {display:none;}
+#panel.hidden, #adminLoginPanel.hidden, #adminPanel.hidden, #adminSearchInput.hidden {display:none !important;}
 .muted {color:rgba(234,242,255,0.7);margin-top:8px;font-size:13px;}
 hr {border:none;border-top:1px solid rgba(255,255,255,0.2);margin:12px 0;}
 #redirecting {color:var(--accent2);font-weight:700;margin-top:8px;font-size:14px;}
@@ -30,6 +31,7 @@ hr {border:none;border-top:1px solid rgba(255,255,255,0.2);margin:12px 0;}
 #adminSearchInput {margin-bottom:12px;}
 #adminCodesContainer {overflow-y:auto;flex:1;position:relative;max-height:340px;}     
 </style>
+<!-- growlauncher fixed admin panel v11 no flash close -->
 </head>
 <body>
 <div class="card">
@@ -56,7 +58,6 @@ hr {border:none;border-top:1px solid rgba(255,255,255,0.2);margin:12px 0;}
 
   <button id="adminBtn">Control Panel</button>
   <div id="adminLoginPanel" class="hidden" style="margin-top:12px;">
-    <div class="muted" style="font-size:12px;margin-bottom:8px;">Admin Auth Debug v3</div>
     <input id="adminEmailInput" type="email" placeholder="Admin email">
     <input id="adminPasswordInput" type="password" placeholder="Password">
     <button id="adminLoginBtn">Login</button>
@@ -80,15 +81,16 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from
 
 const Config = {
   apiKey: "AIzaSyAdJeuG7w4khT4B6Yq5wWBbDYKfCdvWn8w",
-  authDomain: "growlauncher-0.app.com",
+  authDomain: "growlauncher-0.firebaseapp.com",
   projectId: "growlauncher-0",
-  storageBucket: "growlauncher-0.storage.app",
+  storageBucket: "growlauncher-0.appspot.com",
   messagingSenderId: "205612782940",
   appId: "1:205612782940:web:3ec9eb98624158b2829d99"
 };
 const app = initializeApp(Config);
 const db = getFirestore(app);
 const auth = getAuth(app);
+const ADMIN_UID = "F45Ne05XKAMHDueelU29hAeyiEw2";
 
 // User elements
 const getBtn = document.getElementById("getBtn");
@@ -165,9 +167,22 @@ async function handleUserSearch(){
 }
 
 // Admin panel toggle
-adminBtn.addEventListener("click",()=>{
-  if(isAdmin){ signOut(auth); return; }
-  adminLoginPanel.classList.toggle("hidden");
+// Do not auto-close this panel. Only the Logout button can close it.
+adminBtn.addEventListener("click", async ()=>{
+  if(isAdmin || !adminPanel.classList.contains("hidden")){
+    adminPanel.classList.remove("hidden");
+    adminSearchInput.classList.remove("hidden");
+    adminLoginPanel.classList.add("hidden");
+    adminBtn.classList.add("hidden");
+    return;
+  }
+
+  if(auth.currentUser){
+    await enterAdminPanel(auth.currentUser);
+    return;
+  }
+
+  adminLoginPanel.classList.remove("hidden");
   adminEmailInput.focus();
 });
 
@@ -178,64 +193,76 @@ adminLoginBtn.addEventListener("click", async ()=>{
   if(!email || !pw){adminLoginMsg.textContent="Enter admin email and password."; return;}
   try{
     adminLoginMsg.textContent="Logging in...";
-    await signInWithEmailAndPassword(auth,email,pw);
+    const cred = await signInWithEmailAndPassword(auth,email,pw);
     adminEmailInput.value="";
     adminPasswordInput.value="";
-    adminLoginMsg.textContent="Login successful. Checking admin UID...";
+    adminLoginMsg.textContent="Login successful. Loading admin panel...";
+    await enterAdminPanel(cred.user);
   }catch(err){
     console.error(err);
-    adminLoginMsg.textContent="Incorrect admin login.";
+    adminLoginMsg.textContent="Login/admin load error: " + (err.code || err.message || "Unknown error");
   }
 });
 adminPasswordInput.addEventListener("keydown", e=>{if(e.key==="Enter") adminLoginBtn.click();});
 adminEmailInput.addEventListener("keydown", e=>{if(e.key==="Enter") adminPasswordInput.focus();});
 
-onAuthStateChanged(auth, async user=>{
-  if(user){
-    try{
-      adminLoginMsg.textContent="Checking admin access...";
-      const adminRef=doc(db,"admins",user.uid);
-      const adminSnap=await getDoc(adminRef);
+let adminLoading = false;
+async function enterAdminPanel(user){
+  if(!user){ return; }
+  if(adminLoading){ return; }
 
-      if(!adminSnap.exists()){
-        isAdmin=false;
-        adminPanel.classList.add("hidden");
-        adminSearchInput.classList.add("hidden");
-        adminBtn.classList.remove("hidden");
-        codesContainer.innerHTML="";
-        adminLoginPanel.classList.remove("hidden");
-        adminLoginMsg.innerHTML=`This account is not allowed to use the admin panel.<br><b>Logged-in UID:</b><br><code style="word-break:break-all">${user.uid}</code><br><br>Create this exact Firestore doc:<br><code style="word-break:break-all">admins/${user.uid}</code>`;
-        console.log("Logged-in admin UID:", user.uid);
-        return;
-      }
+  const loggedUid = (user.uid || "").trim();
+  const allowedUid = (ADMIN_UID || "").trim();
+  console.log("Logged-in UID:", loggedUid);
+  console.log("Allowed UID in file:", allowedUid);
 
-      isAdmin=true;
-      adminPanel.classList.remove("hidden");
-      adminSearchInput.classList.remove("hidden");
-      adminLoginPanel.classList.add("hidden");
-      adminBtn.classList.add("hidden");
-      adminLoginMsg.textContent="";
-      await loadAdminCodes(true);
-    }
-    catch(err){
-      console.error(err);
-      isAdmin=false;
-      adminPanel.classList.add("hidden");
-      adminSearchInput.classList.add("hidden");
-      adminBtn.classList.remove("hidden");
-      codesContainer.innerHTML="";
-      adminLoginPanel.classList.remove("hidden");
-      adminLoginMsg.innerHTML=`Admin check failed: ${err.code || err.message}<br><b>Logged-in UID:</b><br><code style="word-break:break-all">${user.uid}</code><br><br>Check that Firestore Rules are published and this doc exists:<br><code style="word-break:break-all">admins/${user.uid}</code>`;
-      console.log("Admin check failed for UID:", user.uid, err);
-    }
-  }else{
-    isAdmin=false;
+  // UI check only. Firestore Rules are still the real security layer.
+  if(loggedUid !== allowedUid){
+    isAdmin = false;
+    adminLoginPanel.classList.remove("hidden");
     adminPanel.classList.add("hidden");
     adminSearchInput.classList.add("hidden");
     adminBtn.classList.remove("hidden");
-    codesContainer.innerHTML="";
+    adminLoginMsg.innerHTML = `This account is not allowed to use the admin panel.<br><br><b>Logged-in UID:</b><br><code style="word-break:break-all">${loggedUid}</code><br><br><b>Allowed admin UID:</b><br><code style="word-break:break-all">${allowedUid}</code>`;
+    return;
   }
+
+  adminLoading = true;
+  isAdmin = true;
+  adminLoginMsg.textContent = "";
+  adminPanel.classList.remove("hidden");
+  adminSearchInput.classList.remove("hidden");
+  adminLoginPanel.classList.add("hidden");
+  adminBtn.classList.add("hidden");
+  codesContainer.innerHTML = "Loading admin codes...";
+
+  try{
+    await loadAdminCodes(true);
+  }catch(err){
+    console.error(err);
+    // Keep the panel open so it does not flash and close. Show the real issue inside it.
+    codesContainer.innerHTML = `<p class="muted">Admin panel opened, but Firestore blocked loading codes.<br><br>Error: ${err.code || err.message || "Unknown error"}<br><br>Make sure your Firestore rule uses this UID:<br><code style="word-break:break-all">${loggedUid}</code></p>`;
+  } finally {
+    adminLoading = false;
+  }
+}
+
+onAuthStateChanged(auth, user=>{
+  // Intentionally do not hide the admin panel here.
+  // Some browsers fire auth-state changes while Firebase finishes restoring the session,
+  // which caused the panel to flash open and then disappear.
+  console.log("Auth state changed:", user ? user.uid : "signed out");
 });
+
+function closeAdminPanel(){
+  adminLoading=false;
+  isAdmin=false;
+  adminLoginPanel.classList.add("hidden");
+  adminPanel.classList.add("hidden");
+  adminSearchInput.classList.add("hidden");
+  adminBtn.classList.remove("hidden");
+  codesContainer.innerHTML="";
+}
 
 // Load admin codes with Logout & Reset buttons at top
 async function loadAdminCodes(showTopBtns=false){
@@ -245,6 +272,7 @@ async function loadAdminCodes(showTopBtns=false){
     logoutBtn.textContent="Logout";
     logoutBtn.addEventListener("click", async ()=>{
       await signOut(auth);
+      closeAdminPanel();
     });
     const resetAllBtn=document.createElement("button");
     resetAllBtn.textContent="Reset All Users";
@@ -284,6 +312,7 @@ adminSearchInput.addEventListener("keydown", async e=>{
     logoutBtn.textContent="Logout";
     logoutBtn.addEventListener("click", async ()=>{
       await signOut(auth);
+      closeAdminPanel();
     });
     const resetAllBtn=document.createElement("button");
     resetAllBtn.textContent="Reset All Users";
