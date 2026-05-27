@@ -56,6 +56,7 @@ hr {border:none;border-top:1px solid rgba(255,255,255,0.2);margin:12px 0;}
 
   <button id="adminBtn">Control Panel</button>
   <div id="adminLoginPanel" class="hidden" style="margin-top:12px;">
+    <div class="muted" style="font-size:12px;margin-bottom:8px;">Admin Auth Debug v3</div>
     <input id="adminEmailInput" type="email" placeholder="Admin email">
     <input id="adminPasswordInput" type="password" placeholder="Password">
     <button id="adminLoginBtn">Login</button>
@@ -180,7 +181,7 @@ adminLoginBtn.addEventListener("click", async ()=>{
     await signInWithEmailAndPassword(auth,email,pw);
     adminEmailInput.value="";
     adminPasswordInput.value="";
-    adminLoginMsg.textContent="";
+    adminLoginMsg.textContent="Login successful. Checking admin UID...";
   }catch(err){
     console.error(err);
     adminLoginMsg.textContent="Incorrect admin login.";
@@ -203,8 +204,8 @@ onAuthStateChanged(auth, async user=>{
         adminBtn.classList.remove("hidden");
         codesContainer.innerHTML="";
         adminLoginPanel.classList.remove("hidden");
-        adminLoginMsg.textContent=`This account is not allowed to use the admin panel. UID: ${user.uid}`;
-        await signOut(auth);
+        adminLoginMsg.innerHTML=`This account is not allowed to use the admin panel.<br><b>Logged-in UID:</b><br><code style="word-break:break-all">${user.uid}</code><br><br>Create this exact Firestore doc:<br><code style="word-break:break-all">admins/${user.uid}</code>`;
+        console.log("Logged-in admin UID:", user.uid);
         return;
       }
 
@@ -224,8 +225,8 @@ onAuthStateChanged(auth, async user=>{
       adminBtn.classList.remove("hidden");
       codesContainer.innerHTML="";
       adminLoginPanel.classList.remove("hidden");
-      adminLoginMsg.textContent=`Admin check failed: ${err.code || err.message}. UID: ${user.uid}`;
-      await signOut(auth);
+      adminLoginMsg.innerHTML=`Admin check failed: ${err.code || err.message}<br><b>Logged-in UID:</b><br><code style="word-break:break-all">${user.uid}</code><br><br>Check that Firestore Rules are published and this doc exists:<br><code style="word-break:break-all">admins/${user.uid}</code>`;
+      console.log("Admin check failed for UID:", user.uid, err);
     }
   }else{
     isAdmin=false;
