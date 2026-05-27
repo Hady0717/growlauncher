@@ -191,13 +191,31 @@ adminEmailInput.addEventListener("keydown", e=>{if(e.key==="Enter") adminPasswor
 
 onAuthStateChanged(auth, async user=>{
   if(user){
-    isAdmin=true;
-    adminPanel.classList.remove("hidden");
-    adminSearchInput.classList.remove("hidden");
-    adminLoginPanel.classList.add("hidden");
-    adminBtn.classList.add("hidden");
-    adminLoginMsg.textContent="";
-    try{ await loadAdminCodes(true); }
+    try{
+      adminLoginMsg.textContent="Checking admin access...";
+      const adminRef=doc(db,"admins",user.uid);
+      const adminSnap=await getDoc(adminRef);
+
+      if(!adminSnap.exists()){
+        isAdmin=false;
+        adminPanel.classList.add("hidden");
+        adminSearchInput.classList.add("hidden");
+        adminBtn.classList.remove("hidden");
+        codesContainer.innerHTML="";
+        adminLoginPanel.classList.remove("hidden");
+        adminLoginMsg.textContent=`This account is not allowed to use the admin panel. UID: ${user.uid}`;
+        await signOut(auth);
+        return;
+      }
+
+      isAdmin=true;
+      adminPanel.classList.remove("hidden");
+      adminSearchInput.classList.remove("hidden");
+      adminLoginPanel.classList.add("hidden");
+      adminBtn.classList.add("hidden");
+      adminLoginMsg.textContent="";
+      await loadAdminCodes(true);
+    }
     catch(err){
       console.error(err);
       isAdmin=false;
@@ -206,7 +224,7 @@ onAuthStateChanged(auth, async user=>{
       adminBtn.classList.remove("hidden");
       codesContainer.innerHTML="";
       adminLoginPanel.classList.remove("hidden");
-      adminLoginMsg.textContent="This account is not allowed to use the admin panel.";
+      adminLoginMsg.textContent=`Admin check failed: ${err.code || err.message}. UID: ${user.uid}`;
       await signOut(auth);
     }
   }else{
@@ -232,7 +250,7 @@ async function loadAdminCodes(showTopBtns=false){
     resetAllBtn.addEventListener("click", async ()=>{
       const codesCol=collection(db,"licenses");
       const snapshot=await getDocs(codesCol);
-      snapshot.forEach(async docSnap=>{await updateDoc(doc(db,"licenses",docSnap.id),{uses:3});});
+      await Promise.all(snapshot.docs.map(docSnap=>updateDoc(doc(db,"licenses",docSnap.id),{uses:3})));
       await loadAdminCodes(true);
     });
     codesContainer.appendChild(logoutBtn);
@@ -271,7 +289,7 @@ adminSearchInput.addEventListener("keydown", async e=>{
     resetAllBtn.addEventListener("click", async ()=>{
       const codesCol=collection(db,"licenses");
       const snapshot=await getDocs(codesCol);
-      snapshot.forEach(async docSnap=>{await updateDoc(doc(db,"licenses",docSnap.id),{uses:3});});
+      await Promise.all(snapshot.docs.map(docSnap=>updateDoc(doc(db,"licenses",docSnap.id),{uses:3})));
       await loadAdminCodes(true);
     });
     codesContainer.appendChild(logoutBtn);
@@ -304,5 +322,6 @@ adminSearchInput.addEventListener("input", async ()=>{
 </script>
 </body>
 </html>
+
 
 
