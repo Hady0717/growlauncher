@@ -56,6 +56,7 @@ hr {border:none;border-top:1px solid rgba(255,255,255,0.2);margin:12px 0;}
 
   <button id="adminBtn">Control Panel</button>
   <div id="adminLoginPanel" class="hidden" style="margin-top:12px;">
+    <input id="adminEmailInput" type="email" placeholder="Admin email">
     <input id="adminPasswordInput" type="password" placeholder="Password">
     <button id="adminLoginBtn">Login</button>
     <div id="adminLoginMsg" class="muted"></div>
@@ -74,6 +75,7 @@ hr {border:none;border-top:1px solid rgba(255,255,255,0.2);margin:12px 0;}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getFirestore, doc, getDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
 const Config = {
   apiKey: "AIzaSyAdJeuG7w4khT4B6Yq5wWBbDYKfCdvWn8w",
@@ -85,6 +87,7 @@ const Config = {
 };
 const app = initializeApp(Config);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 // User elements
 const getBtn = document.getElementById("getBtn");
@@ -101,6 +104,7 @@ const userSearchMsg = document.getElementById("userSearchMsg");
 // Admin elements
 const adminBtn = document.getElementById("adminBtn");
 const adminLoginPanel = document.getElementById("adminLoginPanel");
+const adminEmailInput = document.getElementById("adminEmailInput");
 const adminPasswordInput = document.getElementById("adminPasswordInput");
 const adminLoginBtn = document.getElementById("adminLoginBtn");
 const adminLoginMsg = document.getElementById("adminLoginMsg");
@@ -108,7 +112,6 @@ const adminPanel = document.getElementById("adminPanel");
 const adminSearchInput = document.getElementById("adminSearchInput");
 const codesContainer = document.getElementById("adminCodesContainer");
 
-const ADMIN_PASSWORD = "53785";
 let isAdmin=false;
 
 // Show user panel
@@ -148,39 +151,71 @@ userSearchInput.addEventListener("keydown", e=>{if(e.key==="Enter") handleUserSe
 async function handleUserSearch(){
   const searchVal=(userSearchInput.value||"").trim().toUpperCase();
   if(!searchVal){userSearchMsg.textContent=""; return;}
-  const codesCol=collection(db,"licenses");
-  const snapshot=await getDocs(codesCol);
-  let found=false;
-  snapshot.forEach(docSnap=>{
-    const codeStr=docSnap.id.toUpperCase();
-    if(codeStr.includes(searchVal)){
-      const data=docSnap.data();
-      userSearchMsg.textContent=`${docSnap.id} — Uses remaining: ${data.uses}`;
-      found=true;
+  try{
+    const codeRef=doc(db,"licenses",searchVal);
+    const codeSnap=await getDoc(codeRef);
+    if(codeSnap.exists()){
+      const data=codeSnap.data();
+      userSearchMsg.textContent=`${searchVal} — Uses remaining: ${data.uses}`;
+    } else {
+      userSearchMsg.textContent="No matching code found.";
     }
-  });
-  if(!found) userSearchMsg.textContent="No matching code found.";
+  }catch(err){console.error(err); userSearchMsg.textContent="Error checking code. Try again.";}
 }
 
 // Admin panel toggle
 adminBtn.addEventListener("click",()=>{
-  if(isAdmin){isAdmin=false; adminPanel.classList.add("hidden"); adminLoginPanel.classList.add("hidden"); return;}
-  adminLoginPanel.classList.toggle("hidden"); adminPasswordInput.focus();
+  if(isAdmin){ signOut(auth); return; }
+  adminLoginPanel.classList.toggle("hidden");
+  adminEmailInput.focus();
 });
 
 // Admin login
 adminLoginBtn.addEventListener("click", async ()=>{
+  const email=adminEmailInput.value.trim();
   const pw=adminPasswordInput.value.trim();
-  if(pw===ADMIN_PASSWORD){
+  if(!email || !pw){adminLoginMsg.textContent="Enter admin email and password."; return;}
+  try{
+    adminLoginMsg.textContent="Logging in...";
+    await signInWithEmailAndPassword(auth,email,pw);
+    adminEmailInput.value="";
+    adminPasswordInput.value="";
+    adminLoginMsg.textContent="";
+  }catch(err){
+    console.error(err);
+    adminLoginMsg.textContent="Incorrect admin login.";
+  }
+});
+adminPasswordInput.addEventListener("keydown", e=>{if(e.key==="Enter") adminLoginBtn.click();});
+adminEmailInput.addEventListener("keydown", e=>{if(e.key==="Enter") adminPasswordInput.focus();});
+
+onAuthStateChanged(auth, async user=>{
+  if(user){
     isAdmin=true;
     adminPanel.classList.remove("hidden");
     adminSearchInput.classList.remove("hidden");
     adminLoginPanel.classList.add("hidden");
     adminBtn.classList.add("hidden");
-    adminPasswordInput.value="";
     adminLoginMsg.textContent="";
-    await loadAdminCodes(true);
-  } else {adminLoginMsg.textContent="Incorrect password.";}
+    try{ await loadAdminCodes(true); }
+    catch(err){
+      console.error(err);
+      isAdmin=false;
+      adminPanel.classList.add("hidden");
+      adminSearchInput.classList.add("hidden");
+      adminBtn.classList.remove("hidden");
+      codesContainer.innerHTML="";
+      adminLoginPanel.classList.remove("hidden");
+      adminLoginMsg.textContent="This account is not allowed to use the admin panel.";
+      await signOut(auth);
+    }
+  }else{
+    isAdmin=false;
+    adminPanel.classList.add("hidden");
+    adminSearchInput.classList.add("hidden");
+    adminBtn.classList.remove("hidden");
+    codesContainer.innerHTML="";
+  }
 });
 
 // Load admin codes with Logout & Reset buttons at top
@@ -189,8 +224,8 @@ async function loadAdminCodes(showTopBtns=false){
   if(showTopBtns){
     const logoutBtn=document.createElement("button");
     logoutBtn.textContent="Logout";
-    logoutBtn.addEventListener("click", ()=>{
-      isAdmin=false; adminPanel.classList.add("hidden"); adminSearchInput.classList.add("hidden"); adminBtn.classList.remove("hidden"); codesContainer.innerHTML="";
+    logoutBtn.addEventListener("click", async ()=>{
+      await signOut(auth);
     });
     const resetAllBtn=document.createElement("button");
     resetAllBtn.textContent="Reset All Users";
@@ -228,8 +263,8 @@ adminSearchInput.addEventListener("keydown", async e=>{
     codesContainer.innerHTML="";
     const logoutBtn=document.createElement("button");
     logoutBtn.textContent="Logout";
-    logoutBtn.addEventListener("click", ()=>{
-      isAdmin=false; adminPanel.classList.add("hidden"); adminSearchInput.classList.add("hidden"); adminBtn.classList.remove("hidden"); codesContainer.innerHTML="";
+    logoutBtn.addEventListener("click", async ()=>{
+      await signOut(auth);
     });
     const resetAllBtn=document.createElement("button");
     resetAllBtn.textContent="Reset All Users";
@@ -269,7 +304,5 @@ adminSearchInput.addEventListener("input", async ()=>{
 </script>
 </body>
 </html>
-
-
 
 
